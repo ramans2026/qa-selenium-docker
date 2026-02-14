@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  selenium:
+    image: selenium/standalone-chrome
+    ports:
+      - "4444:4444"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4444/wd/hub/status"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  tests:
+    build: .
+    depends_on:
+      selenium:
+        condition: service_healthy
